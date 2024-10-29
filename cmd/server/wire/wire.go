@@ -13,6 +13,7 @@ import (
 	"go-xianyu/pkg/log"
 	"go-xianyu/pkg/server/http"
 	"go-xianyu/pkg/sid"
+
 	"github.com/google/wire"
 	"github.com/spf13/viper"
 )
@@ -23,16 +24,19 @@ var repositorySet = wire.NewSet(
 	repository.NewRepository,
 	repository.NewTransaction,
 	repository.NewUserRepository,
+	repository.NewPostRepository,
 )
 
 var serviceSet = wire.NewSet(
 	service.NewService,
 	service.NewUserService,
+	service.NewPostService,
 )
 
 var handlerSet = wire.NewSet(
 	handler.NewHandler,
 	handler.NewUserHandler,
+	handler.NewPostHandler,
 )
 
 var serverSet = wire.NewSet(

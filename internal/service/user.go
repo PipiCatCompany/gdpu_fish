@@ -5,8 +5,9 @@ import (
 	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/model"
 	"go-xianyu/internal/repository"
-	"golang.org/x/crypto/bcrypt"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService interface {
@@ -14,6 +15,7 @@ type UserService interface {
 	Login(ctx context.Context, req *v1.LoginRequest) (string, error)
 	GetProfile(ctx context.Context, userId string) (*v1.GetProfileResponseData, error)
 	UpdateProfile(ctx context.Context, userId string, req *v1.UpdateProfileRequest) error
+	CreateUserBasic(req v1.CreateUserBasicRequest) (*model.User, error)
 }
 
 func NewUserService(
@@ -111,4 +113,20 @@ func (s *userService) UpdateProfile(ctx context.Context, userId string, req *v1.
 	}
 
 	return nil
+}
+
+func (s *userService) CreateUserBasic(req v1.CreateUserBasicRequest) (*model.User, error) {
+	userId, err := s.sid.GenString()
+	if err != nil {
+		return nil, err
+	}
+
+	return s.userRepo.CreateUserBasic(model.User{
+		UserId:      userId, // 用户雪花id
+		Nickname:    req.Username,
+		Password:    "",
+		OpenId:      req.OpenId,
+		Email:       "",
+		StudentCode: "",
+	})
 }

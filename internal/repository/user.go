@@ -5,6 +5,7 @@ import (
 	"errors"
 	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/model"
+
 	"gorm.io/gorm"
 )
 
@@ -13,6 +14,7 @@ type UserRepository interface {
 	Update(ctx context.Context, user *model.User) error
 	GetByID(ctx context.Context, id string) (*model.User, error)
 	GetByEmail(ctx context.Context, email string) (*model.User, error)
+	CreateUserBasic(u model.User) (*model.User, error)
 }
 
 func NewUserRepository(
@@ -61,4 +63,14 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*model.U
 		return nil, err
 	}
 	return &user, nil
+}
+
+func (r *userRepository) CreateUserBasic(u model.User) (*model.User, error) {
+	result := r.db.Create(&u)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &u, nil
 }

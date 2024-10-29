@@ -7,12 +7,12 @@
 package wire
 
 import (
+	"github.com/google/wire"
+	"github.com/spf13/viper"
 	"go-xianyu/internal/repository"
 	"go-xianyu/internal/server"
 	"go-xianyu/pkg/app"
 	"go-xianyu/pkg/log"
-	"github.com/google/wire"
-	"github.com/spf13/viper"
 )
 
 // Injectors from wire.go:

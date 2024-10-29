@@ -1,7 +1,6 @@
 package server
 
 import (
-	"github.com/gin-gonic/gin"
 	apiV1 "go-xianyu/api/v1"
 	"go-xianyu/docs"
 	"go-xianyu/internal/handler"
@@ -9,6 +8,8 @@ import (
 	"go-xianyu/pkg/jwt"
 	"go-xianyu/pkg/log"
 	"go-xianyu/pkg/server/http"
+
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -19,6 +20,7 @@ func NewHTTPServer(
 	conf *viper.Viper,
 	jwt *jwt.JWT,
 	userHandler *handler.UserHandler,
+	postHandler *handler.PostHandler,
 ) *http.Server {
 	gin.SetMode(gin.DebugMode)
 	s := http.NewServer(
@@ -55,8 +57,15 @@ func NewHTTPServer(
 		// No route group has permission
 		noAuthRouter := v1.Group("/")
 		{
+			// User-router
 			noAuthRouter.POST("/register", userHandler.Register)
 			noAuthRouter.POST("/login", userHandler.Login)
+			noAuthRouter.POST("/user_auto", userHandler.CreateUserBasic)
+			// noAuthRouter.POST("/openid2login", userHandler.LoginByOpenId)
+
+			// POST-router
+			noAuthRouter.POST("/post", postHandler.CreatePost)
+
 		}
 		// Non-strict permission routing group
 		noStrictAuthRouter := v1.Group("/").Use(middleware.NoStrictAuth(jwt, logger))

@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
-	"go-xianyu/api/v1"
+	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/service"
-	"go.uber.org/zap"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type UserHandler struct {
@@ -21,15 +22,16 @@ func NewUserHandler(handler *Handler, userService service.UserService) *UserHand
 }
 
 // Register godoc
-// @Summary 用户注册
-// @Schemes
-// @Description 目前只支持邮箱登录
-// @Tags 用户模块
-// @Accept json
-// @Produce json
-// @Param request body v1.RegisterRequest true "params"
-// @Success 200 {object} v1.Response
-// @Router /register [post]
+//
+//	@Summary	用户注册
+//	@Schemes
+//	@Description	目前只支持邮箱登录
+//	@Tags			用户模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		v1.RegisterRequest	true	"params"
+//	@Success		200		{object}	v1.Response
+//	@Router			/register [post]
 func (h *UserHandler) Register(ctx *gin.Context) {
 	req := new(v1.RegisterRequest)
 	if err := ctx.ShouldBindJSON(req); err != nil {
@@ -47,15 +49,16 @@ func (h *UserHandler) Register(ctx *gin.Context) {
 }
 
 // Login godoc
-// @Summary 账号登录
-// @Schemes
-// @Description
-// @Tags 用户模块
-// @Accept json
-// @Produce json
-// @Param request body v1.LoginRequest true "params"
-// @Success 200 {object} v1.LoginResponse
-// @Router /login [post]
+//
+//	@Summary	账号登录
+//	@Schemes
+//	@Description
+//	@Tags		用户模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		request	body		v1.LoginRequest	true	"params"
+//	@Success	200		{object}	v1.LoginResponse
+//	@Router		/login [post]
 func (h *UserHandler) Login(ctx *gin.Context) {
 	var req v1.LoginRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -74,15 +77,16 @@ func (h *UserHandler) Login(ctx *gin.Context) {
 }
 
 // GetProfile godoc
-// @Summary 获取用户信息
-// @Schemes
-// @Description
-// @Tags 用户模块
-// @Accept json
-// @Produce json
-// @Security Bearer
-// @Success 200 {object} v1.GetProfileResponse
-// @Router /user [get]
+//
+//	@Summary	获取用户信息
+//	@Schemes
+//	@Description
+//	@Tags		用户模块
+//	@Accept		json
+//	@Produce	json
+//	@Security	Bearer
+//	@Success	200	{object}	v1.GetProfileResponse
+//	@Router		/user [get]
 func (h *UserHandler) GetProfile(ctx *gin.Context) {
 	userId := GetUserIdFromCtx(ctx)
 	if userId == "" {
@@ -100,16 +104,17 @@ func (h *UserHandler) GetProfile(ctx *gin.Context) {
 }
 
 // UpdateProfile godoc
-// @Summary 修改用户信息
-// @Schemes
-// @Description
-// @Tags 用户模块
-// @Accept json
-// @Produce json
-// @Security Bearer
-// @Param request body v1.UpdateProfileRequest true "params"
-// @Success 200 {object} v1.Response
-// @Router /user [put]
+//
+//	@Summary	修改用户信息
+//	@Schemes
+//	@Description
+//	@Tags		用户模块
+//	@Accept		json
+//	@Produce	json
+//	@Security	Bearer
+//	@Param		request	body		v1.UpdateProfileRequest	true	"params"
+//	@Success	200		{object}	v1.Response
+//	@Router		/user [put]
 func (h *UserHandler) UpdateProfile(ctx *gin.Context) {
 	userId := GetUserIdFromCtx(ctx)
 
@@ -120,6 +125,22 @@ func (h *UserHandler) UpdateProfile(ctx *gin.Context) {
 	}
 
 	if err := h.userService.UpdateProfile(ctx, userId, &req); err != nil {
+		v1.HandleError(ctx, http.StatusInternalServerError, v1.ErrInternalServerError, nil)
+		return
+	}
+
+	v1.HandleSuccess(ctx, nil)
+}
+
+func (h *UserHandler) CreateUserBasic(ctx *gin.Context) {
+	var req v1.CreateUserBasicRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		v1.HandleError(ctx, http.StatusBadRequest, err, nil)
+		return
+	}
+
+	// 创建用户基本信息
+	if _, err := h.userService.CreateUserBasic(req); err != nil {
 		v1.HandleError(ctx, http.StatusInternalServerError, v1.ErrInternalServerError, nil)
 		return
 	}

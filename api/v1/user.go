@@ -29,3 +29,9 @@ type GetProfileResponse struct {
 	Response
 	Data GetProfileResponseData
 }
+
+type CreateUserBasicRequest struct {
+	// 默认是openid
+	Username string `json:"username"`
+	OpenId   string `json:"openid"`
+}
