@@ -192,6 +192,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/posts": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "二手信息模块"
+                ],
+                "summary": "分页获取二手信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page number",
+                        "name": "pageNum",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/go-xianyu_api_v1.PostPaginationResponse"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/register": {
             "post": {
                 "description": "目前只支持邮箱登录",
@@ -429,6 +475,33 @@ const docTemplate = `{
                 }
             }
         },
+        "go-xianyu_api_v1.PostPaginationResponse": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "createtime": {
+                    "type": "string"
+                },
+                "img": {
+                    "type": "string"
+                },
+                "info": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "user_avatar": {
+                    "type": "string"
+                },
+                "username": {
+                    "description": "UserId     string    ` + "`" + `json:\"userId\"` + "`" + `",
+                    "type": "string"
+                }
+            }
+        },
         "go-xianyu_api_v1.RegisterRequest": {
             "type": "object",
             "required": [
@@ -507,7 +580,7 @@ const docTemplate = `{
                 },
                 "userId": {
                     "description": "发布者UserId",
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },

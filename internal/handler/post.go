@@ -6,6 +6,7 @@ import (
 	"go-xianyu/internal/model"
 	"go-xianyu/internal/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -55,4 +56,36 @@ func (h *PostHandler) CreatePost(ctx *gin.Context) {
 	}
 
 	v1.HandleSuccess(ctx, nil)
+}
+
+// GetPostListByPage godoc
+//
+//	@Summary	分页获取二手信息
+//	@Schemes
+//	@Description
+//	@Tags		二手信息模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		pageNum	query	int		true	"page number"
+//	@Param		pageSize	query	int		true	"page size"
+//	@Security	Bearer
+//	@Success	200		{object}	[]v1.PostPaginationResponse
+//	@Router		/posts [get]
+func (h *PostHandler) GetPostListByPage(ctx *gin.Context) {
+
+	pageNum, err1 := strconv.Atoi(ctx.Query("pageNum"))
+	pageSize, err2 := strconv.Atoi(ctx.Query("pageSize"))
+
+	if err1 != nil || err2 != nil {
+		v1.HandleError(ctx, http.StatusBadRequest, nil, "params invalid")
+		return
+	}
+
+	data, err := h.postService.GetPostListByPage(pageNum, pageSize)
+	if err != nil {
+		v1.HandleError(ctx, http.StatusBadRequest, nil, "service failed")
+		return
+	}
+
+	v1.HandleSuccess(ctx, data)
 }

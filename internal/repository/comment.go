@@ -14,14 +14,16 @@ type CommentRepository interface {
 
 func NewCommentRepository(
 	repository *Repository,
+	userRepository UserRepository,
 ) CommentRepository {
 	return &commentRepository{
-		Repository: repository,
+		repository:     repository,
+		userRepository: userRepository,
 	}
 }
 
 type commentRepository struct {
-	*Repository
+	repository     *Repository
 	userRepository UserRepository // 依赖注入
 }
 
@@ -32,14 +34,15 @@ func (r *commentRepository) GetComment(ctx context.Context, id int64) (*model.Co
 }
 
 func (r *commentRepository) CreateComment(comment *model.Comment) error {
-	return r.db.Create(comment).Error
+	return r.repository.db.Create(comment).Error
 }
 
 func (r *commentRepository) GetCommentList(postId uint) ([]v1.CommentResponse, error) {
 	// 获取postId下的评论
 	var comments []model.Comment
 
-	result := r.db.Where("post_id = ?", postId).Find(&comments)
+	result := r.repository.db.Where("post_id = ?", postId).Find(&comments)
+
 	if result.Error != nil {
 		return []v1.CommentResponse{}, result.Error
 	}

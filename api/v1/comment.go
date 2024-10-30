@@ -2,7 +2,7 @@ package v1
 
 type CreateCommentRequest struct {
 	PostId  uint   `json:"post_id"`
-	UserId  uint   `json:"user_id"`
+	UserId  string `json:"user_id"`
 	Content string `json:"content"`
 }
 

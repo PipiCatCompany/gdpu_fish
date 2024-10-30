@@ -67,10 +67,12 @@ func NewHTTPServer(
 			// noAuthRouter.POST("/openid2login", userHandler.LoginByOpenId)
 
 			// Comment-router
-			// noAuthRouter.GET("/comments", commentHandler.GetCommentList)
 			noAuthRouter.GET("/comments", commentHandler.GetCommentList)
 
+			// Post-router
+			noAuthRouter.GET("/posts", postHandler.GetPostListByPage)
 		}
+
 		// Non-strict permission routing group
 		noStrictAuthRouter := v1.Group("/").Use(middleware.NoStrictAuth(jwt, logger))
 		{
@@ -85,7 +87,6 @@ func NewHTTPServer(
 			// POST-router
 			strictAuthRouter.POST("/post", postHandler.CreatePost)
 			strictAuthRouter.POST("/comment", commentHandler.CreateComment)
-
 		}
 	}
 

@@ -68,6 +68,24 @@ definitions:
       accessToken:
         type: string
     type: object
+  go-xianyu_api_v1.PostPaginationResponse:
+    properties:
+      category:
+        type: string
+      createtime:
+        type: string
+      img:
+        type: string
+      info:
+        type: string
+      price:
+        type: number
+      user_avatar:
+        type: string
+      username:
+        description: UserId     string    `json:"userId"`
+        type: string
+    type: object
   go-xianyu_api_v1.RegisterRequest:
     properties:
       email:
@@ -123,7 +141,7 @@ definitions:
         type: string
       userId:
         description: 发布者UserId
-        type: integer
+        type: string
     type: object
   gorm.DeletedAt:
     properties:
@@ -250,6 +268,35 @@ paths:
       security:
       - Bearer: []
       summary: 发布二手信息
+      tags:
+      - 二手信息模块
+  /posts:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: page number
+        in: query
+        name: pageNum
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/go-xianyu_api_v1.PostPaginationResponse'
+            type: array
+      security:
+      - Bearer: []
+      summary: 分页获取二手信息
       tags:
       - 二手信息模块
   /register:

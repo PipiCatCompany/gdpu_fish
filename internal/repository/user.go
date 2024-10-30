@@ -16,7 +16,7 @@ type UserRepository interface {
 	GetByEmail(ctx context.Context, email string) (*model.User, error)
 	GetByOpenId(ctx context.Context, openid string) (*model.User, error)
 	CreateUserBasic(u model.User) (*model.User, error)
-	GetUserCommentProfile(userId uint) (v1.UserCommentProfile, error)
+	GetUserCommentProfile(userId string) (v1.UserCommentProfile, error)
 }
 
 func NewUserRepository(
@@ -89,7 +89,7 @@ func (r *userRepository) CreateUserBasic(u model.User) (*model.User, error) {
 }
 
 // 通过userId 获取用户信息
-func (r *userRepository) GetUserCommentProfile(userId uint) (v1.UserCommentProfile, error) {
+func (r *userRepository) GetUserCommentProfile(userId string) (v1.UserCommentProfile, error) {
 	var user model.User
 	if err := r.db.Where("user_id = ?", userId).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
