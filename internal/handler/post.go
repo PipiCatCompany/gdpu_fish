@@ -25,10 +25,22 @@ func NewPostHandler(
 	}
 }
 
-// func (h *PostHandler) GetPost(ctx *gin.Context) {
+func (h *PostHandler) GetPost(ctx *gin.Context) {
 
-// }
+}
 
+// CreatePost godoc
+//
+//	@Summary	发布二手信息
+//	@Schemes
+//	@Description
+//	@Tags		二手信息模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		request	body		model.Post	true	"params"
+//	@Security	Bearer
+//	@Success	200
+//	@Router		/post [post]
 func (h *PostHandler) CreatePost(ctx *gin.Context) {
 	var post model.Post
 

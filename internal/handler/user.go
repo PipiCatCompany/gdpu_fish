@@ -132,6 +132,17 @@ func (h *UserHandler) UpdateProfile(ctx *gin.Context) {
 	v1.HandleSuccess(ctx, nil)
 }
 
+// CreateUserBasic godoc
+//
+//	@Summary	使用openid创建用户
+//	@Schemes
+//	@Description
+//	@Tags		用户模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		request	body		v1.CreateUserBasicRequest	true	"params"
+//	@Success	200		{object}	v1.Response
+//	@Router		/user_auto [post]
 func (h *UserHandler) CreateUserBasic(ctx *gin.Context) {
 	var req v1.CreateUserBasicRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -146,4 +157,29 @@ func (h *UserHandler) CreateUserBasic(ctx *gin.Context) {
 	}
 
 	v1.HandleSuccess(ctx, nil)
+}
+
+// LoginByOpenId godoc
+//
+//	@Summary	使用openid登录
+//	@Schemes
+//	@Description
+//	@Tags		用户模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		openid	query string	true	"openid"
+//	@Success	200		{object}	v1.LoginResponse
+//	@Router		/login_openid [get]
+func (h *UserHandler) LoginByOpenId(ctx *gin.Context) {
+	openId := ctx.Query("openid")
+	token, err := h.userService.LoginByOpenId(ctx, openId)
+
+	if err != nil {
+		v1.HandleError(ctx, http.StatusBadRequest, v1.ErrBadRequest, nil)
+		return
+	}
+
+	v1.HandleSuccess(ctx, v1.LoginResponseData{
+		AccessToken: token,
+	})
 }

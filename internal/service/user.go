@@ -16,6 +16,7 @@ type UserService interface {
 	GetProfile(ctx context.Context, userId string) (*v1.GetProfileResponseData, error)
 	UpdateProfile(ctx context.Context, userId string, req *v1.UpdateProfileRequest) error
 	CreateUserBasic(req v1.CreateUserBasicRequest) (*model.User, error)
+	LoginByOpenId(ctx context.Context, openid string) (string, error)
 }
 
 func NewUserService(
@@ -79,6 +80,27 @@ func (s *userService) Login(ctx context.Context, req *v1.LoginRequest) (string, 
 	if err != nil {
 		return "", err
 	}
+	// 用userId生成Jwt令牌
+	token, err := s.jwt.GenToken(user.UserId, time.Now().Add(time.Hour*24*90))
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
+
+func (s *userService) LoginByOpenId(ctx context.Context, openid string) (string, error) {
+	user, err := s.userRepo.GetByOpenId(ctx, openid)
+	if err != nil || user == nil {
+		return "", v1.ErrUnauthorized
+	}
+	// openid 只会返回对应一个用户的token，所以不需要额外验证
+	// err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
+	// if err != nil {
+	// 	return "", err
+	// }
+
+	// 用userId生成Jwt令牌
 	token, err := s.jwt.GenToken(user.UserId, time.Now().Add(time.Hour*24*90))
 	if err != nil {
 		return "", err

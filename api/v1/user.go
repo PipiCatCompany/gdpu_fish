@@ -9,6 +9,7 @@ type LoginRequest struct {
 	Email    string `json:"email" binding:"required,email" example:"1234@gmail.com"`
 	Password string `json:"password" binding:"required" example:"123456"`
 }
+
 type LoginResponseData struct {
 	AccessToken string `json:"accessToken"`
 }
@@ -34,4 +35,9 @@ type CreateUserBasicRequest struct {
 	// 默认是openid
 	Username string `json:"username"`
 	OpenId   string `json:"openid"`
+}
+
+type UserCommentProfile struct {
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
 }

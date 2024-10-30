@@ -13,6 +13,7 @@ type User struct {
 	OpenId      string `gorm:"unique;null"`
 	Email       string `gorm:"unique;not null"`
 	StudentCode string `gorm:"unique;null"`
+	Avatar      string `gorm:"null"` // 用户头像
 }
 
 func (u *User) TableName() string {

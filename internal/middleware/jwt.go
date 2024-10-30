@@ -1,15 +1,18 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
-	"go-xianyu/api/v1"
+	"fmt"
+	v1 "go-xianyu/api/v1"
 	"go-xianyu/pkg/jwt"
 	"go-xianyu/pkg/log"
-	"go.uber.org/zap"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func StrictAuth(j *jwt.JWT, logger *log.Logger) gin.HandlerFunc {
+	fmt.Println("---- 鉴权中间件触发 ----")
 	return func(ctx *gin.Context) {
 		tokenString := ctx.Request.Header.Get("Authorization")
 		if tokenString == "" {

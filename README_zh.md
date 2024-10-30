@@ -11,6 +11,8 @@
         - nunu wire all 生成依赖，wire_gen.go
         - 迁移数据库 -> internal/server/migration.go
         - 测试接口
+        - 接口测试没问题 -> 加swagger注释 -> make swag 生成在线接口文档
+            - 这个直接AI补全
 ```
 
 

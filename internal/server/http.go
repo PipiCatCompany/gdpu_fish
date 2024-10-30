@@ -21,6 +21,7 @@ func NewHTTPServer(
 	jwt *jwt.JWT,
 	userHandler *handler.UserHandler,
 	postHandler *handler.PostHandler,
+	commentHandler *handler.CommentHandler,
 ) *http.Server {
 	gin.SetMode(gin.DebugMode)
 	s := http.NewServer(
@@ -52,6 +53,7 @@ func NewHTTPServer(
 		})
 	})
 
+	// TODO 对服务分group
 	v1 := s.Group("/v1")
 	{
 		// No route group has permission
@@ -60,11 +62,13 @@ func NewHTTPServer(
 			// User-router
 			noAuthRouter.POST("/register", userHandler.Register)
 			noAuthRouter.POST("/login", userHandler.Login)
+			noAuthRouter.GET("/login_openid", userHandler.LoginByOpenId)
 			noAuthRouter.POST("/user_auto", userHandler.CreateUserBasic)
 			// noAuthRouter.POST("/openid2login", userHandler.LoginByOpenId)
 
-			// POST-router
-			noAuthRouter.POST("/post", postHandler.CreatePost)
+			// Comment-router
+			// noAuthRouter.GET("/comments", commentHandler.GetCommentList)
+			noAuthRouter.GET("/comments", commentHandler.GetCommentList)
 
 		}
 		// Non-strict permission routing group
@@ -77,6 +81,11 @@ func NewHTTPServer(
 		strictAuthRouter := v1.Group("/").Use(middleware.StrictAuth(jwt, logger))
 		{
 			strictAuthRouter.PUT("/user", userHandler.UpdateProfile)
+
+			// POST-router
+			strictAuthRouter.POST("/post", postHandler.CreatePost)
+			strictAuthRouter.POST("/comment", commentHandler.CreateComment)
+
 		}
 	}
 
