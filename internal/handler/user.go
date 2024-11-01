@@ -172,14 +172,12 @@ func (h *UserHandler) CreateUserBasic(ctx *gin.Context) {
 //	@Router		/login_openid [get]
 func (h *UserHandler) LoginByOpenId(ctx *gin.Context) {
 	openId := ctx.Query("openid")
-	token, err := h.userService.LoginByOpenId(ctx, openId)
+	data, err := h.userService.LoginByOpenId(ctx, openId)
 
 	if err != nil {
 		v1.HandleError(ctx, http.StatusBadRequest, v1.ErrBadRequest, nil)
 		return
 	}
 
-	v1.HandleSuccess(ctx, v1.LoginResponseData{
-		AccessToken: token,
-	})
+	v1.HandleSuccess(ctx, data)
 }

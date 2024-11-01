@@ -3,22 +3,23 @@ package repository
 import (
 	"context"
 	"fmt"
-	"github.com/glebarez/sqlite"
 	"go-xianyu/pkg/log"
 	"go-xianyu/pkg/zapgorm2"
+	"time"
+
+	"github.com/glebarez/sqlite"
 	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"time"
 )
 
 const ctxTxKey = "TxKey"
 
 type Repository struct {
-	db *gorm.DB
-	//rdb    *redis.Client
+	db     *gorm.DB
+	rdb    *redis.Client
 	logger *log.Logger
 }
 
@@ -29,7 +30,7 @@ func NewRepository(
 ) *Repository {
 	return &Repository{
 		db: db,
-		//rdb:    rdb,
+		// rdb:    rdb,
 		logger: logger,
 	}
 }

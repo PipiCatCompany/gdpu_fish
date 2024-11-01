@@ -1,5 +1,7 @@
 package v1
 
+import "go-xianyu/internal/model"
+
 type RegisterRequest struct {
 	Email    string `json:"email" binding:"required,email" example:"1234@gmail.com"`
 	Password string `json:"password" binding:"required" example:"123456"`
@@ -40,4 +42,9 @@ type CreateUserBasicRequest struct {
 type UserCommentProfile struct {
 	Username string `json:"username"`
 	Avatar   string `json:"avatar"`
+}
+
+type LoginByOpenidResponse struct {
+	User        model.User `json:"user"`
+	AccessToken string     `json:"accessToken"`
 }

@@ -16,7 +16,7 @@ type UserService interface {
 	GetProfile(ctx context.Context, userId string) (*v1.GetProfileResponseData, error)
 	UpdateProfile(ctx context.Context, userId string, req *v1.UpdateProfileRequest) error
 	CreateUserBasic(req v1.CreateUserBasicRequest) (*model.User, error)
-	LoginByOpenId(ctx context.Context, openid string) (string, error)
+	LoginByOpenId(ctx context.Context, openid string) (v1.LoginByOpenidResponse, error)
 }
 
 func NewUserService(
@@ -89,10 +89,10 @@ func (s *userService) Login(ctx context.Context, req *v1.LoginRequest) (string, 
 	return token, nil
 }
 
-func (s *userService) LoginByOpenId(ctx context.Context, openid string) (string, error) {
+func (s *userService) LoginByOpenId(ctx context.Context, openid string) (v1.LoginByOpenidResponse, error) {
 	user, err := s.userRepo.GetByOpenId(ctx, openid)
 	if err != nil || user == nil {
-		return "", v1.ErrUnauthorized
+		return v1.LoginByOpenidResponse{}, v1.ErrUnauthorized
 	}
 	// openid 只会返回对应一个用户的token，所以不需要额外验证
 	// err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
@@ -103,10 +103,11 @@ func (s *userService) LoginByOpenId(ctx context.Context, openid string) (string,
 	// 用userId生成Jwt令牌
 	token, err := s.jwt.GenToken(user.UserId, time.Now().Add(time.Hour*24*90))
 	if err != nil {
-		return "", err
+		return v1.LoginByOpenidResponse{}, err
 	}
 
-	return token, nil
+	// 登陆返回用户信息给前端持久化
+	return v1.LoginByOpenidResponse{User: *user, AccessToken: token}, nil
 }
 
 func (s *userService) GetProfile(ctx context.Context, userId string) (*v1.GetProfileResponseData, error) {

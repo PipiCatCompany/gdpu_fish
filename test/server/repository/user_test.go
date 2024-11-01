@@ -2,13 +2,12 @@ package repository
 
 import (
 	"context"
+	"go-xianyu/internal/repository"
 	"go-xianyu/pkg/log"
 	"testing"
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"go-xianyu/internal/model"
-	"go-xianyu/internal/repository"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -42,15 +41,15 @@ func TestUserRepository_Create(t *testing.T) {
 	userRepo, mock := setupRepository(t)
 
 	ctx := context.Background()
-	user := &model.User{
-		Id:        1,
-		UserId:    "123",
-		Nickname:  "Test",
-		Password:  "password",
-		Email:     "test@example.com",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
+	// user := &model.User{
+	// 	Id:        1,
+	// 	UserId:    "123",
+	// 	Nickname:  "Test",
+	// 	Password:  "password",
+	// 	Email:     "test@example.com",
+	// 	CreatedAt: time.Now(),
+	// 	UpdatedAt: time.Now(),
+	// }
 
 	mock.ExpectBegin()
 	mock.ExpectExec("INSERT INTO `users`").
@@ -68,15 +67,15 @@ func TestUserRepository_Update(t *testing.T) {
 	userRepo, mock := setupRepository(t)
 
 	ctx := context.Background()
-	user := &model.User{
-		Id:        1,
-		UserId:    "123",
-		Nickname:  "Test",
-		Password:  "password",
-		Email:     "test@example.com",
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-	}
+	// user := &model.User{
+	// 	Id:        1,
+	// 	UserId:    "123",
+	// 	Nickname:  "Test",
+	// 	Password:  "password",
+	// 	Email:     "test@example.com",
+	// 	CreatedAt: time.Now(),
+	// 	UpdatedAt: time.Now(),
+	// }
 
 	mock.ExpectBegin()
 	mock.ExpectExec("UPDATE `users`").WillReturnResult(sqlmock.NewResult(1, 1))

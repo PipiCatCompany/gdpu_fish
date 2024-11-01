@@ -102,3 +102,8 @@ func (r *userRepository) GetUserCommentProfile(userId string) (v1.UserCommentPro
 		Avatar:   user.Avatar,
 	}, nil
 }
+
+// 同步用户登陆状态 -> Redis
+// func (r *userRepository) RedisSetUserOnline(ctx context.Context, userId string) error {
+// 	return r.rdb.Set(ctx, userId, "online", 0).Err()
+// }
