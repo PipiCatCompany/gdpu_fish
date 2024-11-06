@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"encoding/json"
 	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/service"
+	"go-xianyu/pkg/wx"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -180,4 +182,50 @@ func (h *UserHandler) LoginByOpenId(ctx *gin.Context) {
 	}
 
 	v1.HandleSuccess(ctx, data)
+}
+
+// GetOpenId godoc
+//
+//	@Summary	获取openid
+//	@Schemes
+//	@Description	后台微信小程序获取openid
+//	@Tags		用户模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		code	query string	true	"js_code"
+//	@Success	200		{object}	wx.GetOpenIdByCodeResponse
+//	@Router		/openid [get]
+func (h *UserHandler) GetOpenId(ctx *gin.Context) {
+	code := ctx.Query("code")
+
+	data := wx.GetOpenIdByCode(code)
+	v1.HandleSuccess(ctx, data)
+}
+
+// UpdateUserStudentCode godoc
+//
+//	@Summary	更新用户的学生代码
+//	@Schemes
+//	@Description	根据提供的学生代码和用户ID更新用户信息
+//	@Tags		用户模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		request	body		v1.UpdateUserStudentCode	true	"params"
+//	@Security	Bearer
+//	@Success	200		{object}	v1.Response
+//	@Router		/user/studentcode [put]
+func (h *UserHandler) UpdateUserStudentCode(ctx *gin.Context) {
+	var req v1.UpdateUserStudentCode
+
+	if err := json.NewDecoder(ctx.Request.Body).Decode(&req); err != nil {
+		v1.HandleError(ctx, http.StatusBadRequest, err, nil)
+		return
+	}
+
+	if err := h.userService.UpdateUserStudentCode(ctx, req); err != nil {
+		v1.HandleError(ctx, http.StatusInternalServerError, err, nil)
+		return
+	}
+
+	v1.HandleSuccess(ctx, nil)
 }

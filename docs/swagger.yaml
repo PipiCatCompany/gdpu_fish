@@ -15,7 +15,7 @@ definitions:
       post_id:
         type: integer
       user_id:
-        type: integer
+        type: string
     type: object
   go-xianyu_api_v1.CreateUserBasicRequest:
     properties:
@@ -117,6 +117,13 @@ definitions:
     required:
     - email
     type: object
+  go-xianyu_api_v1.UpdateUserStudentCode:
+    properties:
+      studentCode:
+        type: string
+      userId:
+        type: string
+    type: object
   go-xianyu_internal_model.Post:
     properties:
       category:
@@ -141,6 +148,19 @@ definitions:
         type: string
       userId:
         description: 发布者UserId
+        type: string
+    type: object
+  go-xianyu_pkg_wx.GetOpenIdByCodeResponse:
+    properties:
+      errcode:
+        type: integer
+      errmsg:
+        type: string
+      openid:
+        type: string
+      session_key:
+        type: string
+      unionid:
         type: string
     type: object
   gorm.DeletedAt:
@@ -247,6 +267,27 @@ paths:
           schema:
             $ref: '#/definitions/go-xianyu_api_v1.LoginResponse'
       summary: 使用openid登录
+      tags:
+      - 用户模块
+  /openid:
+    get:
+      consumes:
+      - application/json
+      description: 后台微信小程序获取openid
+      parameters:
+      - description: js_code
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go-xianyu_pkg_wx.GetOpenIdByCodeResponse'
+      summary: 获取openid
       tags:
       - 用户模块
   /post:
@@ -357,6 +398,30 @@ paths:
       security:
       - Bearer: []
       summary: 修改用户信息
+      tags:
+      - 用户模块
+  /user/studentcode:
+    put:
+      consumes:
+      - application/json
+      description: 根据提供的学生代码和用户ID更新用户信息
+      parameters:
+      - description: params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/go-xianyu_api_v1.UpdateUserStudentCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go-xianyu_api_v1.Response'
+      security:
+      - Bearer: []
+      summary: 更新用户的学生代码
       tags:
       - 用户模块
   /user_auto:

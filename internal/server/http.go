@@ -64,6 +64,7 @@ func NewHTTPServer(
 			noAuthRouter.POST("/login", userHandler.Login)
 			noAuthRouter.GET("/login_openid", userHandler.LoginByOpenId)
 			noAuthRouter.POST("/user_auto", userHandler.CreateUserBasic)
+			noAuthRouter.GET("/openid", userHandler.GetOpenId)
 			// noAuthRouter.POST("/openid2login", userHandler.LoginByOpenId)
 
 			// Comment-router
@@ -87,6 +88,8 @@ func NewHTTPServer(
 			// POST-router
 			strictAuthRouter.POST("/post", postHandler.CreatePost)
 			strictAuthRouter.POST("/comment", commentHandler.CreateComment)
+			// User-router
+			strictAuthRouter.PUT("/user/studentcode", userHandler.UpdateUserStudentCode)
 		}
 	}
 

@@ -8,11 +8,11 @@ import (
 type User struct {
 	gorm.Model
 	UserId      string `gorm:"unique;not null"`
-	Nickname    string `gorm:"not null"`
-	Password    string `gorm:"not null"`
-	OpenId      string `gorm:"unique;null"`
-	Email       string `gorm:"unique;not null"`
-	StudentCode string `gorm:"unique;null"`
+	Nickname    string `gorm:"null"`
+	Password    string `gorm:"null"`
+	OpenId      string `gorm:"unique;not null"`
+	Email       string `gorm:"null"`
+	StudentCode string `gorm:"null"`
 	Avatar      string `gorm:"null"` // 用户头像
 }
 

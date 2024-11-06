@@ -48,3 +48,8 @@ type LoginByOpenidResponse struct {
 	User        model.User `json:"user"`
 	AccessToken string     `json:"accessToken"`
 }
+
+type UpdateUserStudentCode struct {
+	UserId      string `json:"userId"`
+	StudentCode string `json:"studentCode"`
+}

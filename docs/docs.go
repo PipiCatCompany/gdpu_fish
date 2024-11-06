@@ -157,6 +157,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/openid": {
+            "get": {
+                "description": "后台微信小程序获取openid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "获取openid",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "js_code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-xianyu_pkg_wx.GetOpenIdByCodeResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/post": {
             "post": {
                 "security": [
@@ -335,6 +367,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/studentcode": {
+            "put": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "根据提供的学生代码和用户ID更新用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "更新用户的学生代码",
+                "parameters": [
+                    {
+                        "description": "params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/go-xianyu_api_v1.UpdateUserStudentCode"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-xianyu_api_v1.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/user_auto": {
             "post": {
                 "consumes": [
@@ -394,7 +465,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "user_id": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -547,6 +618,17 @@ const docTemplate = `{
                 }
             }
         },
+        "go-xianyu_api_v1.UpdateUserStudentCode": {
+            "type": "object",
+            "properties": {
+                "studentCode": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
         "go-xianyu_internal_model.Post": {
             "type": "object",
             "properties": {
@@ -580,6 +662,26 @@ const docTemplate = `{
                 },
                 "userId": {
                     "description": "发布者UserId",
+                    "type": "string"
+                }
+            }
+        },
+        "go-xianyu_pkg_wx.GetOpenIdByCodeResponse": {
+            "type": "object",
+            "properties": {
+                "errcode": {
+                    "type": "integer"
+                },
+                "errmsg": {
+                    "type": "string"
+                },
+                "openid": {
+                    "type": "string"
+                },
+                "session_key": {
+                    "type": "string"
+                },
+                "unionid": {
                     "type": "string"
                 }
             }

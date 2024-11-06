@@ -71,7 +71,8 @@ func (r *userRepository) GetByOpenId(ctx context.Context, openid string) (*model
 	var user model.User
 	if err := r.DB(ctx).Where("open_id = ?", openid).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
+			// openid第一次登陆 创建Basic_User
+			return nil, err
 		}
 		return nil, err
 	}

@@ -2,12 +2,15 @@ package service
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/model"
 	"go-xianyu/internal/repository"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 type UserService interface {
@@ -17,6 +20,7 @@ type UserService interface {
 	UpdateProfile(ctx context.Context, userId string, req *v1.UpdateProfileRequest) error
 	CreateUserBasic(req v1.CreateUserBasicRequest) (*model.User, error)
 	LoginByOpenId(ctx context.Context, openid string) (v1.LoginByOpenidResponse, error)
+	UpdateUserStudentCode(ctx context.Context, req v1.UpdateUserStudentCode) error
 }
 
 func NewUserService(
@@ -92,7 +96,17 @@ func (s *userService) Login(ctx context.Context, req *v1.LoginRequest) (string, 
 func (s *userService) LoginByOpenId(ctx context.Context, openid string) (v1.LoginByOpenidResponse, error) {
 	user, err := s.userRepo.GetByOpenId(ctx, openid)
 	if err != nil || user == nil {
-		return v1.LoginByOpenidResponse{}, v1.ErrUnauthorized
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// openid第一次登陆 创建Basic_User
+			new_user, _ := s.CreateUserBasic(v1.CreateUserBasicRequest{
+				Username: openid,
+				OpenId:   openid,
+			})
+			user = new_user
+			fmt.Printf("%v", user)
+		} else {
+			return v1.LoginByOpenidResponse{}, v1.ErrUnauthorized
+		}
 	}
 	// openid 只会返回对应一个用户的token，所以不需要额外验证
 	// err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
@@ -152,4 +166,14 @@ func (s *userService) CreateUserBasic(req v1.CreateUserBasicRequest) (*model.Use
 		Email:       "",
 		StudentCode: "",
 	})
+}
+
+func (s *userService) UpdateUserStudentCode(ctx context.Context, req v1.UpdateUserStudentCode) error {
+	user, err := s.userRepo.GetByID(ctx, req.UserId)
+	if err != nil {
+		return err
+	}
+
+	user.StudentCode = req.StudentCode
+	return s.userRepo.Update(ctx, user)
 }
