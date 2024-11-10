@@ -22,6 +22,7 @@ func NewHTTPServer(
 	userHandler *handler.UserHandler,
 	postHandler *handler.PostHandler,
 	commentHandler *handler.CommentHandler,
+	messageHandler *handler.MessageHandler,
 ) *http.Server {
 	gin.SetMode(gin.DebugMode)
 	s := http.NewServer(

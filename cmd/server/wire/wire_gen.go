@@ -39,7 +39,10 @@ func NewWire(viperViper *viper.Viper, logger *log.Logger) (*app.App, func(), err
 	commentRepository := repository.NewCommentRepository(repositoryRepository, userRepository)
 	commentService := service.NewCommentService(serviceService, commentRepository)
 	commentHandler := handler.NewCommentHandler(handlerHandler, commentService)
-	httpServer := server.NewHTTPServer(logger, viperViper, jwtJWT, userHandler, postHandler, commentHandler)
+	messageRepository := repository.NewMessageRepository(repositoryRepository)
+	messageService := service.NewMessageService(serviceService, messageRepository)
+	messageHandler := handler.NewMessageHandler(handlerHandler, messageService)
+	httpServer := server.NewHTTPServer(logger, viperViper, jwtJWT, userHandler, postHandler, commentHandler, messageHandler)
 	job := server.NewJob(logger)
 	appApp := newApp(httpServer, job)
 	return appApp, func() {
@@ -48,11 +51,11 @@ func NewWire(viperViper *viper.Viper, logger *log.Logger) (*app.App, func(), err
 
 // wire.go:
 
-var repositorySet = wire.NewSet(repository.NewDB, repository.NewRepository, repository.NewTransaction, repository.NewUserRepository, repository.NewPostRepository, repository.NewCommentRepository)
+var repositorySet = wire.NewSet(repository.NewDB, repository.NewRepository, repository.NewTransaction, repository.NewUserRepository, repository.NewPostRepository, repository.NewCommentRepository, repository.NewMessageRepository)
 
-var serviceSet = wire.NewSet(service.NewService, service.NewUserService, service.NewPostService, service.NewCommentService)
+var serviceSet = wire.NewSet(service.NewService, service.NewUserService, service.NewPostService, service.NewCommentService, service.NewMessageService)
 
-var handlerSet = wire.NewSet(handler.NewHandler, handler.NewUserHandler, handler.NewPostHandler, handler.NewCommentHandler)
+var handlerSet = wire.NewSet(handler.NewHandler, handler.NewUserHandler, handler.NewPostHandler, handler.NewCommentHandler, handler.NewMessageHandler)
 
 var serverSet = wire.NewSet(server.NewHTTPServer, server.NewJob)
 

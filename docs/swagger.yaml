@@ -78,12 +78,15 @@ definitions:
         type: string
       info:
         type: string
+      post_id:
+        type: integer
       price:
         type: number
+      title:
+        type: string
       user_avatar:
         type: string
       username:
-        description: UserId     string    `json:"userId"`
         type: string
     type: object
   go-xianyu_api_v1.RegisterRequest:
@@ -136,7 +139,7 @@ definitions:
       id:
         type: integer
       img:
-        description: 商品图片URL
+        description: 商品图片URL - 多图用分号隔开
         type: string
       info:
         description: 商品说明
@@ -144,6 +147,9 @@ definitions:
       price:
         description: 商品价格
         type: number
+      title:
+        description: 商品标题
+        type: string
       updatedAt:
         type: string
       userId:
@@ -211,9 +217,9 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: user-openid
+      - description: 商品postId
         in: query
-        name: openid
+        name: postId
         required: true
         type: string
       produces:

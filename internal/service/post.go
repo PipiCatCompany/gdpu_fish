@@ -54,6 +54,8 @@ func (s *postService) GetPostListByPage(pageNum int, pageSize int) ([]v1.PostPag
 		}
 
 		data = append(data, v1.PostPaginationResponse{
+			PostId:     post.ID,
+			Title:      post.Title,
 			Info:       post.Info,
 			Price:      post.Price,
 			Img:        post.Img,

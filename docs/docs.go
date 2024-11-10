@@ -74,8 +74,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "user-openid",
-                        "name": "openid",
+                        "description": "商品postId",
+                        "name": "postId",
                         "in": "query",
                         "required": true
                     }
@@ -561,14 +561,19 @@ const docTemplate = `{
                 "info": {
                     "type": "string"
                 },
+                "post_id": {
+                    "type": "integer"
+                },
                 "price": {
                     "type": "number"
+                },
+                "title": {
+                    "type": "string"
                 },
                 "user_avatar": {
                     "type": "string"
                 },
                 "username": {
-                    "description": "UserId     string    ` + "`" + `json:\"userId\"` + "`" + `",
                     "type": "string"
                 }
             }
@@ -646,7 +651,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "img": {
-                    "description": "商品图片URL",
+                    "description": "商品图片URL - 多图用分号隔开",
                     "type": "string"
                 },
                 "info": {
@@ -656,6 +661,10 @@ const docTemplate = `{
                 "price": {
                     "description": "商品价格",
                     "type": "number"
+                },
+                "title": {
+                    "description": "商品标题",
+                    "type": "string"
                 },
                 "updatedAt": {
                     "type": "string"

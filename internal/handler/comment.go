@@ -49,6 +49,11 @@ func (h *CommentHandler) CreateComment(ctx *gin.Context) {
 		return
 	}
 
+	if err := h.commentService.CreateComment(req); err != nil {
+		v1.HandleError(ctx, http.StatusBadRequest, err, nil)
+		return
+	}
+
 	v1.HandleSuccess(ctx, nil)
 }
 
@@ -60,7 +65,7 @@ func (h *CommentHandler) CreateComment(ctx *gin.Context) {
 //	@Tags		评论模块
 //	@Accept		json
 //	@Produce	json
-//	@Param		openid	query string	true	"user-openid"
+//	@Param		postId	query string	true	"商品postId"
 //	@Success	200		{object} 	[]v1.CommentResponse
 //	@Router		/comments [get]
 func (h *CommentHandler) GetCommentList(ctx *gin.Context) {

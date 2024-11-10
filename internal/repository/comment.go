@@ -47,16 +47,17 @@ func (r *commentRepository) GetCommentList(postId uint) ([]v1.CommentResponse, e
 		return []v1.CommentResponse{}, result.Error
 	}
 
-	commentList := make([]v1.CommentResponse, len(comments))
+	commentList := make([]v1.CommentResponse, 0)
 	for _, comment := range comments {
 		// 序列化用户信息
 		userId := comment.UserId
 		userProfile, _ := r.userRepository.GetUserCommentProfile(userId)
 
 		commentList = append(commentList, v1.CommentResponse{
-			Username: userProfile.Username,
-			Avatar:   userProfile.Avatar,
-			Content:  comment.Content,
+			CreateTime: comment.CreatedAt.Format("2006-01-02 15:04:05"),
+			Username:   userProfile.Username,
+			Avatar:     userProfile.Avatar,
+			Content:    comment.Content,
 		})
 	}
 

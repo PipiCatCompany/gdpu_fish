@@ -10,6 +10,7 @@ import (
 type CommentService interface {
 	GetComment(ctx context.Context, id int64) (*model.Comment, error)
 	GetCommentList(postId uint) ([]v1.CommentResponse, error)
+	CreateComment(req v1.CreateCommentRequest) error
 }
 
 func NewCommentService(

@@ -26,6 +26,7 @@ var repositorySet = wire.NewSet(
 	repository.NewUserRepository,
 	repository.NewPostRepository,
 	repository.NewCommentRepository,
+	repository.NewMessageRepository,
 )
 
 var serviceSet = wire.NewSet(
@@ -33,6 +34,7 @@ var serviceSet = wire.NewSet(
 	service.NewUserService,
 	service.NewPostService,
 	service.NewCommentService,
+	service.NewMessageService,
 )
 
 var handlerSet = wire.NewSet(
@@ -40,6 +42,7 @@ var handlerSet = wire.NewSet(
 	handler.NewUserHandler,
 	handler.NewPostHandler,
 	handler.NewCommentHandler,
+	handler.NewMessageHandler,
 )
 
 var serverSet = wire.NewSet(

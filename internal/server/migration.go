@@ -26,6 +26,8 @@ func (m *Migrate) Start(ctx context.Context) error {
 		// 新增Model之后需要在这增加 Model结构
 		&model.User{},
 		&model.Post{},
+		&model.Comment{},
+		&model.Message{},
 	); err != nil {
 		m.log.Error("user migrate error", zap.Error(err))
 		return err

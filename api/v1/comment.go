@@ -7,7 +7,8 @@ type CreateCommentRequest struct {
 }
 
 type CommentResponse struct {
-	Username string `json:"username"`
-	Avatar   string `json:"avatar"`
-	Content  string `json:"content"`
+	CreateTime string `json:"create_time"`
+	Username   string `json:"username"`
+	Avatar     string `json:"avatar"`
+	Content    string `json:"content"`
 }
