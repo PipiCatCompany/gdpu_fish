@@ -157,6 +157,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/message": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "留言模块"
+                ],
+                "summary": "创建留言",
+                "parameters": [
+                    {
+                        "description": "params",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/go-xianyu_api_v1.CreateMessageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/openid": {
             "get": {
                 "description": "后台微信小程序获取openid",
@@ -450,6 +485,9 @@ const docTemplate = `{
                 "content": {
                     "type": "string"
                 },
+                "create_time": {
+                    "type": "string"
+                },
                 "username": {
                     "type": "string"
                 }
@@ -465,6 +503,20 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "go-xianyu_api_v1.CreateMessageRequest": {
+            "type": "object",
+            "properties": {
+                "chatroomId": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "create_time": {
                     "type": "string"
                 }
             }

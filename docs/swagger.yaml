@@ -5,6 +5,8 @@ definitions:
         type: string
       content:
         type: string
+      create_time:
+        type: string
       username:
         type: string
     type: object
@@ -15,6 +17,15 @@ definitions:
       post_id:
         type: integer
       user_id:
+        type: string
+    type: object
+  go-xianyu_api_v1.CreateMessageRequest:
+    properties:
+      chatroomId:
+        type: string
+      content:
+        type: string
+      create_time:
         type: string
     type: object
   go-xianyu_api_v1.CreateUserBasicRequest:
@@ -275,6 +286,27 @@ paths:
       summary: 使用openid登录
       tags:
       - 用户模块
+  /message:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/go-xianyu_api_v1.CreateMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      security:
+      - Bearer: []
+      summary: 创建留言
+      tags:
+      - 留言模块
   /openid:
     get:
       consumes:

@@ -91,6 +91,9 @@ func NewHTTPServer(
 			strictAuthRouter.POST("/comment", commentHandler.CreateComment)
 			// User-router
 			strictAuthRouter.PUT("/user/studentcode", userHandler.UpdateUserStudentCode)
+
+			// Message-router
+			strictAuthRouter.POST("/msg", messageHandler.CreateMessage)
 		}
 	}
 
