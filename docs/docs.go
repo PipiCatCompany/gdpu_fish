@@ -305,6 +305,33 @@ const docTemplate = `{
                 }
             }
         },
+        "/qiniu/token": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "七牛云模块"
+                ],
+                "summary": "获取七牛云token",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/register": {
             "post": {
                 "description": "目前只支持邮箱登录",
@@ -510,13 +537,22 @@ const docTemplate = `{
         "go-xianyu_api_v1.CreateMessageRequest": {
             "type": "object",
             "properties": {
-                "chatroomId": {
+                "buyer_id": {
                     "type": "string"
                 },
                 "content": {
                     "type": "string"
                 },
                 "create_time": {
+                    "type": "string"
+                },
+                "post_id": {
+                    "type": "string"
+                },
+                "read": {
+                    "type": "boolean"
+                },
+                "seller_id": {
                     "type": "string"
                 }
             }
@@ -618,6 +654,9 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "number"
+                },
+                "sellerId": {
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"

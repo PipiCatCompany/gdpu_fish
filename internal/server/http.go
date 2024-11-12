@@ -88,12 +88,18 @@ func NewHTTPServer(
 
 			// POST-router
 			strictAuthRouter.POST("/post", postHandler.CreatePost)
+
+			// Comment-router
 			strictAuthRouter.POST("/comment", commentHandler.CreateComment)
+
 			// User-router
 			strictAuthRouter.PUT("/user/studentcode", userHandler.UpdateUserStudentCode)
 
 			// Message-router
 			strictAuthRouter.POST("/msg", messageHandler.CreateMessage)
+
+			// QiNiu
+			strictAuthRouter.GET("/qiniu/token", postHandler.GetQiNiuToken)
 		}
 	}
 

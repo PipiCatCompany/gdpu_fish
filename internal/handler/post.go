@@ -5,6 +5,7 @@ import (
 	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/model"
 	"go-xianyu/internal/service"
+	"go-xianyu/pkg/qiniu"
 	"net/http"
 	"strconv"
 
@@ -88,4 +89,20 @@ func (h *PostHandler) GetPostListByPage(ctx *gin.Context) {
 	}
 
 	v1.HandleSuccess(ctx, data)
+}
+
+// GetQiNiuToken godoc
+//
+//	@Summary	获取七牛云token
+//	@Schemes
+//	@Description
+//	@Tags		七牛云模块
+//	@Accept		json
+//	@Produce	json
+//	@Security	Bearer
+//	@Success	200		{object}	string
+//	@Router		/qiniu/token [get]
+func (h *PostHandler) GetQiNiuToken(ctx *gin.Context) {
+	token := qiniu.GetToken()
+	v1.HandleSuccess(ctx, token)
 }

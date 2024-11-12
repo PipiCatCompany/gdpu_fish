@@ -7,6 +7,7 @@ type PostPaginationResponse struct {
 	Title      string    `json:"title"`
 	Info       string    `json:"info"`
 	Username   string    `json:"username"`
+	SellerId   string    `join:"seller_id"`
 	UserAvatar string    `json:"user_avatar"`
 	Price      float64   `json:"price"`
 	Img        string    `json:"img"`

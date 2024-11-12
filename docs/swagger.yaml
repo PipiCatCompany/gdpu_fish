@@ -21,11 +21,17 @@ definitions:
     type: object
   go-xianyu_api_v1.CreateMessageRequest:
     properties:
-      chatroomId:
+      buyer_id:
         type: string
       content:
         type: string
       create_time:
+        type: string
+      post_id:
+        type: string
+      read:
+        type: boolean
+      seller_id:
         type: string
     type: object
   go-xianyu_api_v1.CreateUserBasicRequest:
@@ -93,6 +99,8 @@ definitions:
         type: integer
       price:
         type: number
+      sellerId:
+        type: string
       title:
         type: string
       user_avatar:
@@ -378,6 +386,22 @@ paths:
       summary: 分页获取二手信息
       tags:
       - 二手信息模块
+  /qiniu/token:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: 获取七牛云token
+      tags:
+      - 七牛云模块
   /register:
     post:
       consumes:

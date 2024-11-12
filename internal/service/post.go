@@ -62,6 +62,7 @@ func (s *postService) GetPostListByPage(pageNum int, pageSize int) ([]v1.PostPag
 			Category:   post.Category,
 			CreateTime: post.CreatedAt,
 			Username:   user.Username,
+			SellerId:   post.UserId,
 			UserAvatar: user.Avatar,
 		})
 	}

@@ -1,8 +1,10 @@
 package v1
 
 type CreateMessageRequest struct {
-	CreatedAt  string `gorm:"type:string" json:"create_time"`
-	ChatroomId string `gorm:"type:string" json:"chatroomId"`
-	Content    string `gorm:"type:string" json:"content"`
-	Read       bool   `json:"read"`
+	CreatedAt string `json:"create_time"`
+	PostId    string `json:"post_id"`
+	SellerId  string `json:"seller_id"`
+	BuyerId   string `json:"buyer_id"`
+	Content   string `json:"content"`
+	Read      bool   `json:"read"`
 }
