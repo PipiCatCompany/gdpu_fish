@@ -171,9 +171,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "留言模块"
+                    "私聊模块"
                 ],
-                "summary": "创建留言",
+                "summary": "创建私聊",
                 "parameters": [
                     {
                         "description": "params",
@@ -188,6 +188,97 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK"
+                    }
+                }
+            }
+        },
+        "/msgChanel": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "根据聊天室ID获取私聊频道信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "私聊模块"
+                ],
+                "summary": "获取私聊频道信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "聊天室ID",
+                        "name": "chatroomId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-xianyu_api_v1.MessageChanelResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgs": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "根据聊天室ID、页码和页面大小分页获取私聊信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "私聊模块"
+                ],
+                "summary": "分页获取私聊信息 （ godoc有问题）",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "聊天室ID",
+                        "name": "chatroomId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "pageNum",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页面大小",
+                        "name": "pageSize",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/go-xianyu_api_v1.PostPaginationResponse"
+                            }
+                        }
                     }
                 }
             }
@@ -546,8 +637,12 @@ const docTemplate = `{
                 "create_time": {
                     "type": "string"
                 },
-                "post_id": {
+                "msg_sender": {
+                    "description": "发消息的用户id",
                     "type": "string"
+                },
+                "post_id": {
+                    "type": "integer"
                 },
                 "read": {
                     "type": "boolean"
@@ -634,6 +729,13 @@ const docTemplate = `{
                 }
             }
         },
+        "go-xianyu_api_v1.MessageChanelResponse": {
+            "type": "object",
+            "properties": {
+                "stuff_info": {},
+                "user_info": {}
+            }
+        },
         "go-xianyu_api_v1.PostPaginationResponse": {
             "type": "object",
             "properties": {
@@ -644,7 +746,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "img": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "info": {
                     "type": "string"

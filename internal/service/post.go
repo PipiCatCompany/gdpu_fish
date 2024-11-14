@@ -5,6 +5,7 @@ import (
 	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/model"
 	"go-xianyu/internal/repository"
+	"strings"
 )
 
 type PostService interface {
@@ -58,7 +59,7 @@ func (s *postService) GetPostListByPage(pageNum int, pageSize int) ([]v1.PostPag
 			Title:      post.Title,
 			Info:       post.Info,
 			Price:      post.Price,
-			Img:        post.Img,
+			Img:        strings.Split(post.Img, ";"),
 			Category:   post.Category,
 			CreateTime: post.CreatedAt,
 			Username:   user.Username,

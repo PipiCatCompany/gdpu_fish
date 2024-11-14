@@ -97,9 +97,11 @@ func NewHTTPServer(
 
 			// Message-router
 			strictAuthRouter.POST("/msg", messageHandler.CreateMessage)
+			strictAuthRouter.GET("/msgChanel", messageHandler.GetMessageChanelInfo)
+			strictAuthRouter.GET("/msgs", messageHandler.GetMessageByPagination)
 
 			// QiNiu
-			strictAuthRouter.GET("/qiniu/token", postHandler.GetQiNiuToken)
+			noStrictAuthRouter.GET("/qiniu/token", postHandler.GetQiNiuToken)
 		}
 	}
 

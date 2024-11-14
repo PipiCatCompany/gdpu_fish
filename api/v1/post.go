@@ -10,7 +10,16 @@ type PostPaginationResponse struct {
 	SellerId   string    `join:"seller_id"`
 	UserAvatar string    `json:"user_avatar"`
 	Price      float64   `json:"price"`
-	Img        string    `json:"img"`
+	Img        []string  `json:"img"`
 	Category   string    `json:"category"`
 	CreateTime time.Time `json:"createtime"`
+}
+
+type CreatePostRequest struct {
+	Title    string  `json:"title"`
+	Info     string  `json:"info"`
+	UserId   string  `json:"userId"`
+	Price    float64 `json:"price"`
+	Img      string  `json:"img"`
+	Category string  `json:"category"`
 }

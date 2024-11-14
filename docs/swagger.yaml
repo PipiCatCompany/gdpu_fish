@@ -27,8 +27,11 @@ definitions:
         type: string
       create_time:
         type: string
-      post_id:
+      msg_sender:
+        description: 发消息的用户id
         type: string
+      post_id:
+        type: integer
       read:
         type: boolean
       seller_id:
@@ -85,6 +88,11 @@ definitions:
       accessToken:
         type: string
     type: object
+  go-xianyu_api_v1.MessageChanelResponse:
+    properties:
+      stuff_info: {}
+      user_info: {}
+    type: object
   go-xianyu_api_v1.PostPaginationResponse:
     properties:
       category:
@@ -92,7 +100,9 @@ definitions:
       createtime:
         type: string
       img:
-        type: string
+        items:
+          type: string
+        type: array
       info:
         type: string
       post_id:
@@ -312,9 +322,67 @@ paths:
           description: OK
       security:
       - Bearer: []
-      summary: 创建留言
+      summary: 创建私聊
       tags:
-      - 留言模块
+      - 私聊模块
+  /msgChanel:
+    get:
+      consumes:
+      - application/json
+      description: 根据聊天室ID获取私聊频道信息
+      parameters:
+      - description: 聊天室ID
+        in: query
+        name: chatroomId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go-xianyu_api_v1.MessageChanelResponse'
+      security:
+      - Bearer: []
+      summary: 获取私聊频道信息
+      tags:
+      - 私聊模块
+  /msgs:
+    get:
+      consumes:
+      - application/json
+      description: 根据聊天室ID、页码和页面大小分页获取私聊信息
+      parameters:
+      - description: 聊天室ID
+        in: query
+        name: chatroomId
+        required: true
+        type: string
+      - description: 页码
+        in: query
+        name: pageNum
+        required: true
+        type: integer
+      - description: 页面大小
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/go-xianyu_api_v1.PostPaginationResponse'
+            type: array
+      security:
+      - Bearer: []
+      summary: 分页获取私聊信息 （ godoc有问题）
+      tags:
+      - 私聊模块
   /openid:
     get:
       consumes:

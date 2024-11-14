@@ -44,13 +44,20 @@ func (h *PostHandler) GetPost(ctx *gin.Context) {
 //	@Success	200
 //	@Router		/post [post]
 func (h *PostHandler) CreatePost(ctx *gin.Context) {
-	var post model.Post
+	var req v1.CreatePostRequest
 
-	if err := json.NewDecoder(ctx.Request.Body).Decode(&post); err != nil {
+	if err := json.NewDecoder(ctx.Request.Body).Decode(&req); err != nil {
 		v1.HandleError(ctx, http.StatusBadRequest, err, nil)
 		return
 	}
 
+	post := model.Post{
+		Title:  req.Title,
+		Info:   req.Info,
+		Price:  req.Price,
+		UserId: req.UserId,
+		Img:    req.Img,
+	}
 	if err := h.postService.CreatePost(&post); err != nil {
 		v1.HandleError(ctx, http.StatusBadRequest, err, nil)
 		return
