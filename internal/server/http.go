@@ -96,9 +96,9 @@ func NewHTTPServer(
 			strictAuthRouter.PUT("/user/studentcode", userHandler.UpdateUserStudentCode)
 
 			// Message-router
-			strictAuthRouter.POST("/msg", messageHandler.CreateMessage)
-			strictAuthRouter.GET("/msgChanel", messageHandler.GetMessageChanelInfo)
-			strictAuthRouter.GET("/msgs", messageHandler.GetMessageByPagination)
+			noStrictAuthRouter.POST("/msg", messageHandler.CreateMessage)
+			noStrictAuthRouter.GET("/msgChanel", messageHandler.GetMessageChanelInfo)
+			noStrictAuthRouter.GET("/msgs", messageHandler.GetMessageByPagination)
 
 			// QiNiu
 			noStrictAuthRouter.GET("/qiniu/token", postHandler.GetQiNiuToken)

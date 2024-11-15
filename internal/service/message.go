@@ -75,8 +75,9 @@ func (s *messageService) GetMessageChanelInfo(ctx *gin.Context, chatroomId strin
 	return v1.MessageChanelResponse{
 		StuffInfo: post,
 		UserInfo: map[string]interface{}{
-			"seller": map[string]interface{}{"userId": userId1, "avatar": user1.Avatar},
-			"buyer":  map[string]interface{}{"userId": userId2, "avatar": user2.Avatar},
+			// userId 为Key的Map
+			userId1: map[string]interface{}{"username": user1.Username, "avatar": user1.Avatar},
+			userId2: map[string]interface{}{"username": user2.Username, "avatar": user2.Avatar},
 		},
 	}, nil
 }
