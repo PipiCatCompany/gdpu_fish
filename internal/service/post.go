@@ -12,6 +12,7 @@ type PostService interface {
 	GetPost(ctx context.Context, id int64) (*model.Post, error)
 	CreatePost(post *model.Post) error
 	GetPostListByPage(pageNum int, pageSize int) ([]v1.PostPaginationResponse, error)
+	GetPostInfo(postId uint) *model.Post
 }
 
 func NewPostService(
@@ -69,4 +70,9 @@ func (s *postService) GetPostListByPage(pageNum int, pageSize int) ([]v1.PostPag
 	}
 
 	return data, nil
+}
+
+func (s *postService) GetPostInfo(postId uint) *model.Post {
+	post, _ := s.postRepository.GetPostById(postId)
+	return post
 }

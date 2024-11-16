@@ -26,7 +26,8 @@ func NewWire(viperViper *viper.Viper, logger *log.Logger) (*app.App, func(), err
 	jwtJWT := jwt.NewJwt(viperViper)
 	handlerHandler := handler.NewHandler(logger)
 	db := repository.NewDB(viperViper, logger)
-	repositoryRepository := repository.NewRepository(logger, db)
+	client := repository.NewRedis(viperViper)
+	repositoryRepository := repository.NewRepository(logger, db, client)
 	transaction := repository.NewTransaction(repositoryRepository)
 	sidSid := sid.NewSid()
 	serviceService := service.NewService(transaction, logger, sidSid, jwtJWT)
@@ -40,7 +41,7 @@ func NewWire(viperViper *viper.Viper, logger *log.Logger) (*app.App, func(), err
 	commentService := service.NewCommentService(serviceService, commentRepository)
 	commentHandler := handler.NewCommentHandler(handlerHandler, commentService)
 	messageRepository := repository.NewMessageRepository(repositoryRepository)
-	messageService := service.NewMessageService(serviceService, messageRepository, postRepository, userRepository)
+	messageService := service.NewMessageService(serviceService, messageRepository, postRepository, userRepository, viperViper)
 	messageHandler := handler.NewMessageHandler(handlerHandler, messageService)
 	httpServer := server.NewHTTPServer(logger, viperViper, jwtJWT, userHandler, postHandler, commentHandler, messageHandler)
 	job := server.NewJob(logger)
@@ -51,7 +52,7 @@ func NewWire(viperViper *viper.Viper, logger *log.Logger) (*app.App, func(), err
 
 // wire.go:
 
-var repositorySet = wire.NewSet(repository.NewDB, repository.NewRepository, repository.NewTransaction, repository.NewUserRepository, repository.NewPostRepository, repository.NewCommentRepository, repository.NewMessageRepository)
+var repositorySet = wire.NewSet(repository.NewDB, repository.NewRedis, repository.NewRepository, repository.NewTransaction, repository.NewUserRepository, repository.NewPostRepository, repository.NewCommentRepository, repository.NewMessageRepository)
 
 var serviceSet = wire.NewSet(service.NewService, service.NewUserService, service.NewPostService, service.NewCommentService, service.NewMessageService)
 

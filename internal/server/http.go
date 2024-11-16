@@ -73,6 +73,7 @@ func NewHTTPServer(
 
 			// Post-router
 			noAuthRouter.GET("/posts", postHandler.GetPostListByPage)
+			noAuthRouter.GET("/post/info", postHandler.GetPostInfo)
 		}
 
 		// Non-strict permission routing group
@@ -94,6 +95,7 @@ func NewHTTPServer(
 
 			// User-router
 			strictAuthRouter.PUT("/user/studentcode", userHandler.UpdateUserStudentCode)
+			strictAuthRouter.GET("/user/logout", userHandler.Logout)
 
 			// Message-router
 			noStrictAuthRouter.POST("/msg", messageHandler.CreateMessage)

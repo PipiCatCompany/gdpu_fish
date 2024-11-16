@@ -26,11 +26,11 @@ type Repository struct {
 func NewRepository(
 	logger *log.Logger,
 	db *gorm.DB,
-	// rdb *redis.Client,
+	rdb *redis.Client,
 ) *Repository {
 	return &Repository{
-		db: db,
-		// rdb:    rdb,
+		db:     db,
+		rdb:    rdb,
 		logger: logger,
 	}
 }

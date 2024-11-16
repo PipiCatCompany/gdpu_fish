@@ -77,7 +77,7 @@ func (h *PostHandler) CreatePost(ctx *gin.Context) {
 //	@Param		pageNum	query	int		true	"page number"
 //	@Param		pageSize	query	int		true	"page size"
 //	@Security	Bearer
-//	@Success	200		{object}	[]v1.PostPaginationResponse
+//	@Success	200		{object}	[]model.Post
 //	@Router		/posts [get]
 func (h *PostHandler) GetPostListByPage(ctx *gin.Context) {
 
@@ -112,4 +112,21 @@ func (h *PostHandler) GetPostListByPage(ctx *gin.Context) {
 func (h *PostHandler) GetQiNiuToken(ctx *gin.Context) {
 	token := qiniu.GetToken()
 	v1.HandleSuccess(ctx, token)
+}
+
+// GetPostInfo godoc
+//
+//	@Summary	获取二手信息
+//	@Schemes
+//	@Description
+//	@Tags		二手信息模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		postId	query	int		true	"postId"
+//	@Success	200		{object}	model.Post
+//	@Router		/post/info [get]
+func (h *PostHandler) GetPostInfo(ctx *gin.Context) {
+	postId, _ := strconv.Atoi(ctx.Query("postId"))
+	post := h.postService.GetPostInfo(uint(postId))
+	v1.HandleSuccess(ctx, post)
 }

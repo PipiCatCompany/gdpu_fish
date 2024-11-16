@@ -322,7 +322,7 @@ paths:
           description: OK
       security:
       - Bearer: []
-      summary: 创建私聊
+      summary: 创建私聊 内置两个异步操作（Mysql和Cpp长连接）
       tags:
       - 私聊模块
   /msgChanel:
@@ -425,6 +425,26 @@ paths:
       summary: 发布二手信息
       tags:
       - 二手信息模块
+  /post/info:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: postId
+        in: query
+        name: postId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go-xianyu_internal_model.Post'
+      summary: 获取二手信息
+      tags:
+      - 二手信息模块
   /posts:
     get:
       consumes:
@@ -447,7 +467,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/go-xianyu_api_v1.PostPaginationResponse'
+              $ref: '#/definitions/go-xianyu_internal_model.Post'
             type: array
       security:
       - Bearer: []
@@ -528,6 +548,29 @@ paths:
       security:
       - Bearer: []
       summary: 修改用户信息
+      tags:
+      - 用户模块
+  /user/logout:
+    get:
+      consumes:
+      - application/json
+      description: 根据提供的用户ID登出用户
+      parameters:
+      - description: userId
+        in: query
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/go-xianyu_api_v1.Response'
+      security:
+      - Bearer: []
+      summary: 用户登出
       tags:
       - 用户模块
   /user/studentcode:

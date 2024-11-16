@@ -18,8 +18,8 @@ type GetOpenIdByCodeResponse struct {
 }
 
 func GetOpenIdByCode(code string) GetOpenIdByCodeResponse {
-	appID := "wx8f907ce205f15ed5"                // 替换为你的 APPID
-	secret := "2a2232fc3228e6beb752a0bb55fac962" // 替换为你的 SECRET
+	appID := "wx09070093b5f169f0"                // 替换为你的 APPID
+	secret := "ccdcae93597d9b584aafb2b1f1f3fb06" // 替换为你的 SECRET
 	jsCode := code                               // 替换为你的 JSCODE
 
 	// 构建请求 URL

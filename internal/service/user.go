@@ -21,6 +21,7 @@ type UserService interface {
 	CreateUserBasic(req v1.CreateUserBasicRequest) (*model.User, error)
 	LoginByOpenId(ctx context.Context, openid string) (v1.LoginByOpenidResponse, error)
 	UpdateUserStudentCode(ctx context.Context, req v1.UpdateUserStudentCode) error
+	Logout(ctx context.Context, userId string) error
 }
 
 func NewUserService(
@@ -120,6 +121,9 @@ func (s *userService) LoginByOpenId(ctx context.Context, openid string) (v1.Logi
 		return v1.LoginByOpenidResponse{}, err
 	}
 
+	// 同步用户状态给Redis
+	s.userRepo.SetUserOnline(ctx, user.UserId)
+
 	// 登陆返回用户信息给前端持久化
 	return v1.LoginByOpenidResponse{User: *user, AccessToken: token}, nil
 }
@@ -176,4 +180,8 @@ func (s *userService) UpdateUserStudentCode(ctx context.Context, req v1.UpdateUs
 
 	user.StudentCode = req.StudentCode
 	return s.userRepo.Update(ctx, user)
+}
+
+func (s *userService) Logout(ctx context.Context, userId string) error {
+	return s.userRepo.SetUserOffline(ctx, userId)
 }

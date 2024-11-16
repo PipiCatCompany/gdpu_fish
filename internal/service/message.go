@@ -5,10 +5,12 @@ import (
 	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/model"
 	"go-xianyu/internal/repository"
+	"go-xianyu/pkg/websocket"
 	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 type MessageService interface {
@@ -23,12 +25,14 @@ func NewMessageService(
 	messageRepository repository.MessageRepository,
 	postRepository repository.PostRepository,
 	userRepository repository.UserRepository,
+	conf *viper.Viper,
 ) MessageService {
 	return &messageService{
 		Service:           service,
 		messageRepository: messageRepository,
 		postRepository:    postRepository,
 		userRepository:    userRepository,
+		conf:              conf,
 	}
 }
 
@@ -37,6 +41,7 @@ type messageService struct {
 	messageRepository repository.MessageRepository
 	postRepository    repository.PostRepository
 	userRepository    repository.UserRepository
+	conf              *viper.Viper
 }
 
 func (s *messageService) GetMessage(ctx context.Context, id int64) (*model.Message, error) {
@@ -44,6 +49,17 @@ func (s *messageService) GetMessage(ctx context.Context, id int64) (*model.Messa
 }
 
 func (s *messageService) CreateMessage(message v1.CreateMessageRequest) error {
+	// 增加异步操作
+	// go func(conf *viper.Viper, message v1.CreateMessageRequest) {
+	// 	// 转发给Cpp长连接服务器
+	// 	errCppServer := websocket.SyncMessageToCpp(conf, message)
+	// 	if errCppServer != nil {
+	// 		fmt.Printf("%v", errCppServer)
+	// 	}
+	// }(s.conf, message)
+
+	websocket.SyncMessageToCpp(s.conf, message)
+
 	return s.messageRepository.CreateMessage(message)
 }
 
@@ -56,7 +72,7 @@ func (s *messageService) GetMessageChanelInfo(ctx *gin.Context, chatroomId strin
 	postId, userId1, userId2 := list[0], list[1], list[2]
 	postIdI, _ := strconv.ParseInt(postId, 10, 64)
 
-	post, err := s.postRepository.GetPostById(postIdI)
+	post, err := s.postRepository.GetPostById(uint(postIdI))
 	if err != nil {
 		return v1.MessageChanelResponse{}, err
 	}

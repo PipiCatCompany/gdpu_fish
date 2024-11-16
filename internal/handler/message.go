@@ -31,7 +31,7 @@ func (h *MessageHandler) GetMessage(ctx *gin.Context) {
 
 // CreateMessage godoc
 //
-//	@Summary	创建私聊
+//	@Summary	创建私聊 内置两个异步操作（Mysql和Cpp长连接）
 //	@Schemes
 //	@Description
 //	@Tags		私聊模块

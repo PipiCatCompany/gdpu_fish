@@ -229,3 +229,27 @@ func (h *UserHandler) UpdateUserStudentCode(ctx *gin.Context) {
 
 	v1.HandleSuccess(ctx, nil)
 }
+
+// Logout godoc
+//
+//	@Summary	用户登出
+//	@Schemes
+//	@Description	根据提供的用户ID登出用户
+//	@Tags		用户模块
+//	@Accept		json
+//	@Produce	json
+//	@Param		userId	query string	true	"userId"
+//	@Security	Bearer
+//	@Success	200		{object}	v1.Response
+//	@Router		/user/logout [get]
+func (h *UserHandler) Logout(ctx *gin.Context) {
+	userId := ctx.Query("userId")
+
+	err := h.userService.Logout(ctx, userId)
+	if err != nil {
+		v1.HandleError(ctx, http.StatusInternalServerError, err, nil)
+		return
+	}
+
+	v1.HandleSuccess(ctx, "logout success")
+}

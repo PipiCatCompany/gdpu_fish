@@ -173,7 +173,7 @@ const docTemplate = `{
                 "tags": [
                     "私聊模块"
                 ],
-                "summary": "创建私聊",
+                "summary": "创建私聊 内置两个异步操作（Mysql和Cpp长连接）",
                 "parameters": [
                     {
                         "description": "params",
@@ -350,6 +350,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/post/info": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "二手信息模块"
+                ],
+                "summary": "获取二手信息",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "postId",
+                        "name": "postId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-xianyu_internal_model.Post"
+                        }
+                    }
+                }
+            }
+        },
         "/posts": {
             "get": {
                 "security": [
@@ -389,7 +420,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/go-xianyu_api_v1.PostPaginationResponse"
+                                "$ref": "#/definitions/go-xianyu_internal_model.Post"
                             }
                         }
                     }
@@ -508,6 +539,43 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/go-xianyu_api_v1.UpdateProfileRequest"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/go-xianyu_api_v1.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/logout": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "根据提供的用户ID登出用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户模块"
+                ],
+                "summary": "用户登出",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "userId",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {

@@ -17,6 +17,8 @@ type UserRepository interface {
 	GetByOpenId(ctx context.Context, openid string) (*model.User, error)
 	CreateUserBasic(u model.User) (*model.User, error)
 	GetUserCommentProfile(userId string) (v1.UserCommentProfile, error)
+	SetUserOnline(ctx context.Context, userId string) error
+	SetUserOffline(ctx context.Context, userId string) error
 }
 
 func NewUserRepository(
@@ -105,6 +107,12 @@ func (r *userRepository) GetUserCommentProfile(userId string) (v1.UserCommentPro
 }
 
 // 同步用户登陆状态 -> Redis
-// func (r *userRepository) RedisSetUserOnline(ctx context.Context, userId string) error {
-// 	return r.rdb.Set(ctx, userId, "online", 0).Err()
-// }
+func (r *userRepository) SetUserOnline(ctx context.Context, userId string) error {
+	result := r.rdb.Set(ctx, userId, "online", 0).Err()
+	return result
+}
+
+func (r *userRepository) SetUserOffline(ctx context.Context, userId string) error {
+	result := r.rdb.Del(ctx, userId).Err()
+	return result
+}

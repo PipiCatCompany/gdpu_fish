@@ -4,6 +4,7 @@ import (
 	"context"
 	v1 "go-xianyu/api/v1"
 	"go-xianyu/internal/model"
+	"strconv"
 )
 
 type MessageRepository interface {
@@ -31,7 +32,20 @@ func (r *messageRepository) GetMessage(ctx context.Context, id int64) (*model.Me
 }
 
 func (r *messageRepository) CreateMessage(message v1.CreateMessageRequest) error {
-	return r.Repository.db.Create(message).Error
+	chatroomId := strconv.FormatUint(uint64(message.PostId), 10) + "-" + message.SellerId + "-" + message.BuyerId
+	msg := model.Message{
+		PostId:     message.PostId,
+		SellerId:   message.SellerId,
+		BuyerId:    message.BuyerId,
+		ChatroomId: chatroomId,
+		Content:    message.Content,
+		Read:       message.Read,
+		MsgSender:  message.MsgSender,
+	}
+
+	res := r.Repository.db.Create(&msg).Error
+
+	return res
 }
 
 func (r *messageRepository) GetMessageListByPage(pageSize int, pageNum int, chartroomId string) ([]model.Message, error) {
